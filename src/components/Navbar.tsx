@@ -1,7 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 
-export default function Navbar() {
+type NavbarProps = {
+  onOpenModal: () => void;
+};
+
+export default function Navbar({ onOpenModal }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -248,7 +252,11 @@ export default function Navbar() {
         <div className="cf-nav-inner">
           {/* Logo */}
           <a href="/" className="cf-logo">
-            <div className="cf-logo-mark">CF</div>
+               <img 
+                src="/logo.jpeg" 
+                alt="CodingoForge Logo" 
+                className="h-10 w-auto object-contain"
+              />
             <span className="cf-logo-text">CodingoForge</span>
           </a>
 
@@ -270,7 +278,7 @@ export default function Navbar() {
           {/* Desktop actions */}
           <div className="cf-nav-actions">
             <a href="/auth" className="cf-btn-ghost">Sign In</a>
-            <a href="/auth" className="cf-btn-primary">Get Started →</a>
+            <button type="button" className="cf-btn-primary" onClick={onOpenModal}>Get Started →</button>
           </div>
 
           {/* Mobile hamburger */}
@@ -293,7 +301,14 @@ export default function Navbar() {
         ))}
         <div className="cf-mobile-actions">
           <a href="/auth" className="cf-btn-ghost" style={{ textAlign: "center" }}>Sign In</a>
-          <a href="/auth" className="cf-btn-primary" style={{ textAlign: "center" }}>Get Started →</a>
+          <button
+            type="button"
+            className="cf-btn-primary"
+            style={{ textAlign: "center" }}
+            onClick={onOpenModal}
+          >
+            Get Started →
+          </button>
         </div>
       </div>
     </>

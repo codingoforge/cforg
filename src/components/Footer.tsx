@@ -282,7 +282,11 @@ export default function Footer() {
             {/* Brand column */}
             <div className="cf-footer-brand">
               <a href="/" className="cf-footer-logo">
-                <div className="cf-footer-logo-mark">CF</div>
+                 <img 
+                src="/logo.jpeg" 
+                alt="CodingoForge Logo" 
+                className="h-10 w-auto object-contain"
+              />
                 <span className="cf-footer-logo-text">CodingoForge</span>
               </a>
               <p className="cf-footer-tagline">
