@@ -1,6 +1,14 @@
 "use client";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { trackLogin } from "../firebase";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signInWithPopup
+} from "firebase/auth";
 
+import { auth, googleProvider } from "../firebase";
 type AuthMode = "login" | "register";
 
 const NoiseBg = () => (
@@ -44,22 +52,67 @@ const DiscordIcon = () => (
 );
 
 export default function AuthPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<AuthMode>("login");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
 
-  const handleSubmit = () => {
+const handleSubmit = async () => {
+  try {
     setLoading(true);
-    setTimeout(() => setLoading(false), 1800);
-  };
 
-  const handleOAuth = (provider: string) => {
+    let res;
+
+    if (mode === "login") {
+      res = await signInWithEmailAndPassword(auth, form.email, form.password);
+    } else {
+      res = await createUserWithEmailAndPassword(auth, form.email, form.password);
+    }
+
+    // 🔥 ADD THIS
+    const token = await res.user.getIdToken();
+
+    await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    trackLogin();
+    navigate("/");
+
+  } catch (err: any) {
+    alert(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+const handleOAuth = async (provider: string) => {
+  try {
     setOauthLoading(provider);
-    setTimeout(() => setOauthLoading(null), 1800);
-  };
 
+    if (provider === "google") {
+      const res = await signInWithPopup(auth, googleProvider);
+
+      const token = await res.user.getIdToken();
+
+      await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      trackLogin();
+      navigate("/");
+    }
+
+  } catch (err: any) {
+    alert(err.message);
+  } finally {
+    setOauthLoading(null);
+  }
+};
   const oauthProviders = [
     { id: "google",  label: "Google",  icon: <GoogleIcon />,  bg: "bg-white hover:bg-gray-50", text: "text-gray-700",  border: "border-gray-200" },
     { id: "github",  label: "GitHub",  icon: <GithubIcon />,  bg: "bg-[#161b22] hover:bg-[#1f2937]", text: "text-white",  border: "border-[#30363d]" },
@@ -217,14 +270,14 @@ export default function AuthPage() {
       <div className="grid-bg fixed inset-0 opacity-100 pointer-events-none z-0" />
 
       {/* Glow orbs */}
-      <div className="glow-orb fixed -top-50 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full pointer-events-none z-0"
+      <div className="glow-orb fixed -top-50 left-1/2 -translate-x-1/2 w-175 h-125 rounded-full pointer-events-none z-0"
         style={{ background: "radial-gradient(ellipse, rgba(124,92,252,0.13) 0%, transparent 70%)" }} />
-      <div className="glow-orb fixed bottom-[-180px] left-1/4 w-[400px] h-[400px] rounded-full pointer-events-none z-0"
+      <div className="glow-orb fixed -bottom-45 left-1/4 w-100 h-100 rounded-full pointer-events-none z-0"
         style={{ background: "radial-gradient(ellipse, rgba(79,142,247,0.1) 0%, transparent 70%)" }} />
 
       {/* Main content */}
       <div className="relative z-10 flex-1 flex items-center justify-center px-4 py-30 ">
-        <div className="w-full max-w-[420px] space-y-5">
+        <div className="w-full max-w-105 space-y-5">
 
           {/* Header */}
           <div className="fade-up d1 text-center space-y-2">
