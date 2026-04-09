@@ -1,19 +1,19 @@
 # 🚀 Codingo Forge — Frontend
 
-Frontend application for **Codingo Forge**, an MVP studio platform that converts startup ideas into structured projects with AI-powered intake, payment flow, and public tracking.
+Frontend application for **Codingo Forge**, a platform that transforms startup ideas into structured projects with AI-powered intake, role-based dashboards, and real-time tracking.
 
 ---
 
 ## 🧠 Overview
 
-This frontend enables:
+This frontend is designed to:
 
-* AI-based startup idea submission
-* Structured inquiry confirmation flow
-* Admin dashboard for managing inquiries & projects
-* Public ticket tracker for founders
+* Capture startup ideas using AI-assisted input
+* Provide a structured submission flow
+* Enable clients to track their projects
+* Allow admins and employees to manage the full lifecycle
 
-Built for **speed, clarity, and scalability**.
+The system is built with a focus on **clarity, scalability, and real-world usability**.
 
 ---
 
@@ -22,58 +22,134 @@ Built for **speed, clarity, and scalability**.
 * **Framework:** React (Vite)
 * **Styling:** Tailwind CSS
 * **State Management:** Zustand
-* **API Client:** Axios
 * **Routing:** React Router
+* **Auth:** Clerk (planned)
 
 ---
 
-## 📁 Project Structure
+## 🔐 Authentication
 
-```
-src/
-├── api/            # API calls (axios instance + modules)
-├── components/     # Reusable UI + feature components
-├── hooks/          # Custom hooks (auth, data fetching)
-├── pages/          # Public + Admin pages
-├── store/          # Zustand state stores
-├── utils/          # Helpers (formatting, constants)
-├── App.jsx         # Routes & guards
-└── main.jsx
-```
+Authentication will be handled using **Clerk**, enabling:
 
----
+* Email/password login
+* Social logins (Google, etc.)
+* Secure session handling
 
-## 🔐 Authentication (Current Status)
+### Role-based behavior:
 
-* Firebase Authentication integrated (Login / Signup)
-* Session handled via Firebase SDK
-* UI for authentication flows implemented
+* **Admin** → Redirected to Admin Dashboard
 
-> ⚠️ Note: Will be migrated to JWT-based auth (httpOnly cookies) in backend integration phase
+* **Client** → Redirected to Client Dashboard
+
+* **Employee** → Access to both dashboards
+
+* If employee is removed:
+
+  * Admin access revoked
+  * Client access retained (if applicable)
 
 ---
 
-## 🌐 Features Implemented
+## 📄 Pages & Features
 
 ### 1. Home Page
 
-* Landing UI for Codingo Forge
-* Entry point for users
-
-### 2. Authentication UI
-
-* Login / Signup interface
-* Firebase auth integration
+* Landing page of the platform
+* Entry point for idea submission
+* AI prompt box for startup idea input
 
 ---
 
-## 🧩 Planned Features (Next Phase)
+### 2. Authentication Page
 
-* AI Prompt Box (Gemini integration)
-* Inquiry confirmation modal
-* Admin dashboard (inquiries & projects)
-* Public ticket tracker
-* Protected routes (RBAC-based)
+* Unified login/signup interface
+* Supports:
+
+  * Email login
+  * Social login via Clerk
+
+---
+
+### 3. Client Dashboard
+
+**Sidebar:**
+
+* Projects
+* Profile
+
+**Features:**
+
+* View all projects
+* Open individual project to:
+
+  * Track progress (stage-wise)
+  * View admin comments
+* Perform actions:
+
+  * Request additional services (website/app/etc.)
+  * Make payments
+  * Receive delivered products
+
+---
+
+### 🔁 Feature Request System
+
+* Clients can request **new features within existing projects**
+
+**Flow:**
+
+1. Request submitted
+2. Admin review
+3. Accept / Reject
+
+If accepted:
+
+* Cost assigned
+* Payment made
+* Development starts
+* Delivered within same project
+
+**Tracking stages:**
+
+* Requested
+* Under Review
+* Accepted
+* In Development
+* Delivered
+
+---
+
+### 4. Admin Dashboard
+
+Accessible to:
+
+* Admin
+* Employees
+
+**Capabilities:**
+
+* Manage inquiries
+* Manage projects
+* Update tracking stages
+* Add comments
+* Set pricing
+* Assign/remove employees
+
+---
+
+## 🧩 Project Structure
+
+```
+src/
+├── api/            # API layer (axios setup)
+├── components/     # Reusable UI components
+├── hooks/          # Custom hooks
+├── pages/          # All pages (public + dashboards)
+├── store/          # Zustand state
+├── utils/          # Helpers/constants
+├── App.jsx         # Routes + guards
+└── main.jsx
+```
 
 ---
 
@@ -85,23 +161,18 @@ Base URL configured via environment:
 VITE_API_BASE_URL=http://localhost:5000/api/v1
 ```
 
-Axios instance uses:
-
-* `withCredentials: true`
-* Centralized error handling (planned)
+* Axios instance with credentials support
+* Modular API structure planned
 
 ---
 
-## 📦 Setup & Installation
+## 📦 Setup
 
 ```bash
-# Clone repo
-git clone <repo-url>
-
 # Install dependencies
 npm install
 
-# Run dev server
+# Run development server
 npm run dev
 ```
 
@@ -130,21 +201,22 @@ Designed for:
 
 ## 🧪 Development Status
 
-* ✅ Initial UI setup complete
-* ✅ Firebase auth integrated
-* 🚧 Backend API integration pending
-* 🚧 Admin dashboard pending
-* 🚧 AI intake flow pending
+* ✅ Home page UI implemented
+* ✅ Authentication UI created
+* ✅ Firebase auth setup (temporary)
+* 🚧 Clerk integration (planned)
+* 🚧 Dashboards (in progress)
+* 🚧 API integration (pending)
 
 ---
 
 ## 🎯 Next Steps
 
-* Integrate backend APIs (Node + Express)
-* Replace Firebase auth with JWT system
-* Build AI intake flow (Gemini)
-* Implement admin panel
-* Add ticket tracking UI
+* Integrate Clerk authentication
+* Build client dashboard
+* Build admin dashboard
+* Integrate backend APIs
+* Implement tracking system UI
 
 ---
 
@@ -157,6 +229,4 @@ Backend Developer Intern — Codingo Forge
 
 ## ⚠️ Note
 
-This is an internal project under active development.
-Not intended for public distribution.
-
+This project is under active development and part of an internal system.
