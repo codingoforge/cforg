@@ -309,7 +309,24 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           <a key={label} href={href} onClick={() => setMenuOpen(false)}>{label}</a>
         ))}
         <div className="cf-mobile-actions">
-          <a href="/auth" className="cf-btn-ghost" style={{ textAlign: "center" }}>Sign In</a>
+          <SignedOut>
+            <SignInButton>
+              <button className="cf-btn-ghost">Sign In</button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <a href="/dashboard" className="cf-btn-ghost">Dashboard</a>
+          </SignedIn>
+
+          <button
+            type="button"
+            className="cf-btn-primary"
+            onClick={onOpenModal}
+          >
+            Get Started →
+          </button>
+        </div>
           <button
             type="button"
             className="cf-btn-primary"
@@ -318,7 +335,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           >
             Get Started →
           </button>
-        </div>
+       
       </div>
     </>
   );
