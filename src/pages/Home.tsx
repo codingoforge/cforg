@@ -448,9 +448,9 @@ export default function HomePage() {
         <div className="cf-grid-bg absolute inset-0 opacity-100" />
 
         {/* Glow orbs */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[600px] rounded-full pointer-events-none"
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-150 rounded-full pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(124,92,252,0.1) 0%, transparent 70%)" }} />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+        <div className="absolute bottom-0 right-0 w-100 h-100 rounded-full pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(79,142,247,0.07) 0%, transparent 70%)" }} />
 
         <div className="relative max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
