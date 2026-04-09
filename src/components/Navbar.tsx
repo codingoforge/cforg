@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-
+import { SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 type NavbarProps = {
   onOpenModal: () => void;
 };
@@ -277,7 +278,15 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
 
           {/* Desktop actions */}
           <div className="cf-nav-actions">
-            <a href="/auth" className="cf-btn-ghost">Sign In</a>
+            <SignedOut>
+              <SignInButton>
+                <button className="cf-btn-ghost">Sign In</button>
+              </SignInButton>
+            </SignedOut>
+
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
             <button type="button" className="cf-btn-primary" onClick={onOpenModal}>Get Started →</button>
           </div>
 
