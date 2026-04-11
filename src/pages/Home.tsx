@@ -483,57 +483,60 @@ export default function HomePage() {
           </div>
 
           {/* Floating tracker card */}
-          <div className="fade-up delay-3 relative hidden lg:block">
-            <div className="relative bg-[#0d0d1a] border border-[#1e1e3a] rounded-2xl p-6 shadow-2xl"
-              style={{ boxShadow: "0 0 60px rgba(124,92,252,0.1)" }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-500/70" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
-                <div className="w-3 h-3 rounded-full bg-green-500/70" />
-                <span className="ml-2 text-[#2a2a4a] text-xs" style={{ fontFamily: "'Space Mono',monospace" }}>project_tracker.cf</span>
-              </div>
-              <div className="space-y-3">
-                {[
-                  { label: "Project", val: "AcmeMVP", valCls: "text-white font-semibold" },
-                  { label: "Ref ID", val: "CF-K9X3R1", special: "gradient" },
-                  { label: "Status", val: "Sprint 2 Active", special: "status" },
-                ].map(({ label, val, valCls, special }) => (
-                  <div key={label} className="flex items-center justify-between text-sm">
-                    <span className="text-[#444466]">{label}</span>
-                    {special === "gradient" ? (
-                      <span className="font-mono font-bold" style={{ background: "linear-gradient(135deg,#7c5cfc,#4f8ef7)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>{val}</span>
-                    ) : special === "status" ? (
-                      <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />{val}
-                      </span>
-                    ) : (
-                      <span className={valCls}>{val}</span>
-                    )}
-                  </div>
-                ))}
-                <div className="space-y-1.5 pt-2">
-                  <div className="flex justify-between text-xs text-[#2a2a4a]" style={{ fontFamily: "'Space Mono',monospace" }}>
-                    <span>BUILD PROGRESS</span><span>60%</span>
-                  </div>
-                  <div className="h-2 bg-[#0a0a18] rounded-full overflow-hidden">
-                    <div className="h-full w-[60%] rounded-full" style={{ background: "linear-gradient(to right,#7c5cfc,#4f8ef7)" }} />
-                  </div>
-                </div>
-                <div className="pt-2 space-y-2">
-                  {["✓ Kickoff Call", "✓ Design Sprint", "⟳ Engineering Sprint", "◦ Beta Testing", "◦ Launch"].map((s) => (
-                    <div key={s} className="text-xs" style={{
-                      fontFamily: "'Space Mono',monospace",
-                      color: s.startsWith("✓") ? "#34d399" : s.startsWith("⟳") ? "#a78bfa" : "#1e1e3a",
-                    }}>{s}</div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="absolute -top-3 -right-3 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg"
-              style={{ background: "linear-gradient(135deg,#7c5cfc,#4f8ef7)" }}>
-              LIVE BUILD
-            </div>
-          </div>
+         {/* Prompt Box — replaces floating tracker card */}
+<div className="fade-up delay-3 relative hidden lg:block">
+  <div className="relative bg-[#0d0d1a] border border-[#1e1e3a] rounded-2xl p-8 shadow-2xl"
+    style={{ boxShadow: "0 0 60px rgba(124,92,252,0.1)" }}>
+    
+    {/* Header label */}
+    <p style={{ fontFamily: "'Space Mono',monospace", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "#7c5cfc", marginBottom: "1.25rem" }}>
+      // pitch_assistant.ai
+    </p>
+
+    {/* Title */}
+    <h3 className="text-2xl font-black text-white text-center tracking-tight mb-5">
+      How can I help you today?
+    </h3>
+
+    {/* Textarea input */}
+    <div className="bg-[#0a0a18] border border-[#1e1e3a] rounded-xl p-3 flex items-end gap-3 focus-within:border-[#7c5cfc] transition-colors">
+      <textarea
+        placeholder="What's on your mind?"
+        rows={2}
+        className="flex-1 bg-transparent border-none outline-none text-white text-sm placeholder-[#2a2a4a] resize-none leading-relaxed"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+      />
+      <button
+        className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-all hover:opacity-85"
+        style={{ background: "linear-gradient(135deg,#7c5cfc,#4f8ef7)" }}
+        onClick={() => setModalOpen(true)}
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+        </svg>
+      </button>
+    </div>
+
+    {/* Quick chips */}
+    <div className="flex flex-wrap gap-2 mt-4">
+      {["MVP in 4 weeks", "Pitch deck", "Prototype sprint", "Tech strategy"].map((chip) => (
+        <span key={chip}
+          className="text-xs px-3 py-1.5 rounded-full cursor-pointer transition-all"
+          style={{ background: "rgba(124,92,252,0.08)", border: "1px solid rgba(124,92,252,0.18)", color: "#a78bfa", fontFamily: "'Space Mono',monospace", letterSpacing: "0.05em" }}
+          onClick={() => setModalOpen(true)}
+        >
+          {chip}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  {/* Badge */}
+  <div className="absolute -top-3 -right-3 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg"
+    style={{ background: "linear-gradient(135deg,#7c5cfc,#4f8ef7)" }}>
+    AI-Powered
+  </div>
+</div>
         </div>
       </section>
 
