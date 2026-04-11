@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
+
 type NavbarProps = {
   onOpenModal: () => void;
 };
@@ -64,18 +65,11 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           text-decoration: none;
           flex-shrink: 0;
         }
-        .cf-logo-mark {
-          width: 34px;
-          height: 34px;
-          border-radius: 9px;
-          background: linear-gradient(135deg, #7c5cfc 0%, #4f8ef7 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 900;
-          font-size: 14px;
-          color: #fff;
-          letter-spacing: -0.03em;
+        .cf-logo img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          object-fit: cover;
           flex-shrink: 0;
         }
         .cf-logo-text {
@@ -152,6 +146,25 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
         .cf-btn-primary:hover {
           opacity: 0.88;
           transform: translateY(-1px);
+        }
+        .cf-btn-dashboard {
+          text-decoration: none;
+          color: #a78bfa;
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          padding: 8px 16px;
+          border-radius: 9px;
+          border: 1px solid rgba(124, 92, 252, 0.3);
+          background: rgba(124, 92, 252, 0.08);
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s;
+          font-family: 'Space Mono', monospace;
+        }
+        .cf-btn-dashboard:hover {
+          background: rgba(124, 92, 252, 0.15);
+          border-color: rgba(124, 92, 252, 0.5);
         }
 
         /* Status pill */
@@ -253,15 +266,11 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
         <div className="cf-nav-inner">
           {/* Logo */}
           <a href="/" className="cf-logo">
-               <img 
-                src="/logo.jpeg" 
-                alt="CodingoForge Logo" 
-                className="h-10 w-auto object-contain"
-              />
+            <img src="/logo.jpeg" alt="CodingoForge Logo" />
             <span className="cf-logo-text">CodingoForge</span>
           </a>
 
-          {/* Desktop links */}
+          {/* Desktop links — marketing sections only */}
           <ul className="cf-nav-links">
             {navLinks.map(({ label, href }) => (
               <li key={label}>
@@ -279,15 +288,21 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           {/* Desktop actions */}
           <div className="cf-nav-actions">
             <SignedOut>
-              <SignInButton>
+              {/* Not logged in → show Sign In button */}
+              <SignInButton mode="redirect" fallbackRedirectUrl="/sign-in">
                 <button className="cf-btn-ghost">Sign In</button>
               </SignInButton>
             </SignedOut>
 
             <SignedIn>
-              <UserButton />
+              {/* Logged in → show Dashboard link + avatar */}
+              <a href="/dashboard" className="cf-btn-dashboard">Dashboard</a>
+              <UserButton afterSignOutUrl="/" />
             </SignedIn>
-            <button type="button" className="cf-btn-primary" onClick={onOpenModal}>Get Started →</button>
+
+            <button type="button" className="cf-btn-primary" onClick={onOpenModal}>
+              Get Started →
+            </button>
           </div>
 
           {/* Mobile hamburger */}
@@ -310,32 +325,26 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
         ))}
         <div className="cf-mobile-actions">
           <SignedOut>
-            <SignInButton>
-              <button className="cf-btn-ghost">Sign In</button>
+            <SignInButton mode="redirect" fallbackRedirectUrl="/sign-in">
+              <button className="cf-btn-ghost" style={{ width: "100%" }}>Sign In</button>
             </SignInButton>
           </SignedOut>
 
           <SignedIn>
-            <a href="/dashboard" className="cf-btn-ghost">Dashboard</a>
+            <a href="/dashboard" className="cf-btn-dashboard" style={{ textAlign: "center" }}>
+              Dashboard
+            </a>
           </SignedIn>
 
           <button
             type="button"
             className="cf-btn-primary"
-            onClick={onOpenModal}
+            style={{ textAlign: "center" }}
+            onClick={() => { setMenuOpen(false); onOpenModal(); }}
           >
             Get Started →
           </button>
         </div>
-          <button
-            type="button"
-            className="cf-btn-primary"
-            style={{ textAlign: "center" }}
-            onClick={onOpenModal}
-          >
-            Get Started →
-          </button>
-       
       </div>
     </>
   );

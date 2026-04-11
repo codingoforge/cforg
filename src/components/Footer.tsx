@@ -285,7 +285,7 @@ export default function Footer() {
                  <img 
                 src="/logo.jpeg" 
                 alt="CodingoForge Logo" 
-                className="h-10 w-auto object-contain"
+                className="h-10 w-10 object-cover rounded-full"
               />
                 <span className="cf-footer-logo-text">CodingoForge</span>
               </a>
