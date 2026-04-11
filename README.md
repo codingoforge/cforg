@@ -1,4 +1,4 @@
-# 🚀 Codingo Forge — Frontend
+# 🚀 Codingo Forge 
 
 Frontend application for **Codingo Forge**, a platform that transforms startup ideas into structured projects with AI-powered intake, role-based dashboards, and real-time tracking.
 
