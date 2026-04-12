@@ -188,8 +188,8 @@ function AccountInfoCard({ userData, loading }: { userData: UserData | null; loa
 
 // ─── Sections ─────────────────────────────────────────────────────────────────
 
-function OverviewSection({ projects, payments, userData, loading }: {
-  projects: Project[]; payments: Payment[]; userData: UserData | null; loading: boolean;
+function OverviewSection({ projects, userData, loading }: {
+  projects: Project[]; userData: UserData | null; loading: boolean;
 }) {
   const active    = projects.filter(p => p.status === "active").length;
   const completed = projects.filter(p => p.status === "completed").length;
@@ -390,7 +390,7 @@ export default function Dashboard() {
       case "Projects": return <ProjectsSection projects={projects} loading={loading} onRefresh={fetchAll} />;
       case "Payments": return <PaymentsSection payments={payments} loading={loading} onRefresh={fetchAll} />;
       case "Settings": return <SettingsSection userData={userData} loading={loading} />;
-      default:         return <OverviewSection projects={projects} payments={payments} userData={userData} loading={loading} />;
+      default:         return <OverviewSection projects={projects} userData={userData} loading={loading} />;
     }
   };
 
