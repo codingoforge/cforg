@@ -7,7 +7,7 @@ interface PitchModalProps {
 export default function PitchModal({ onClose }: PitchModalProps) {
 
   const [currency, setCurrency] = useState("INR");
-  const [convertedPrice, setConvertedPrice] = useState(12400);
+  const [convertedPrice, setConvertedPrice] = useState(0);
   const [rate, setRate] = useState(1);
   const [budgetOptions, setBudgetOptions] = useState<string[]>([]);
 
@@ -28,11 +28,10 @@ export default function PitchModal({ onClose }: PitchModalProps) {
 
   const symbol = currency === "INR" ? "₹" : currency === "USD" ? "$" : "€";
 
-  // 🔥 FETCH RATE
+  // ✅ FETCH RATE
   useEffect(() => {
     if (currency === "INR") {
       setRate(1);
-      setConvertedPrice(12400);
       return;
     }
 
@@ -41,14 +40,13 @@ export default function PitchModal({ onClose }: PitchModalProps) {
       .then(data => {
         if (data.success) {
           setRate(data.amount);
-          setConvertedPrice(parseFloat((12400 * data.amount).toFixed(2)));
         }
       })
       .catch(() => console.log("API error"));
 
   }, [currency]);
 
-  // 🔥 DYNAMIC BUDGET
+  // ✅ GENERATE BUDGET OPTIONS
   useEffect(() => {
     const base = [
       { min: 0, max: 400000 },
@@ -65,9 +63,32 @@ export default function PitchModal({ onClose }: PitchModalProps) {
     });
 
     setBudgetOptions(options);
-    setForm(prev => ({ ...prev, budget: options[0] }));
+
+    if (!form.budget) {
+      setForm(prev => ({ ...prev, budget: options[0] }));
+    }
 
   }, [rate]);
+
+  // ✅ ESTIMATED PRICE FIX (MAIN BUG FIX)
+  const getEstimated = (budget: string) => {
+    if (!budget) return 0;
+
+    const clean = budget.replace(/[^\d–+]/g, "");
+
+    if (clean.includes("+")) {
+      const min = parseInt(clean.replace("+", ""));
+      return min;
+    }
+
+    const [min, max] = clean.split("–").map(Number);
+    return (min + max) / 2;
+  };
+
+  useEffect(() => {
+    const estimated = getEstimated(form.budget);
+    setConvertedPrice(Number(estimated.toFixed(2)));
+  }, [form.budget, rate]);
 
   return (
     <div
@@ -114,7 +135,11 @@ export default function PitchModal({ onClose }: PitchModalProps) {
           {/* SELECTS */}
           <div className="grid grid-cols-3 gap-3">
 
-            <select className={selectCls}>
+            <select
+              value={form.stage}
+              onChange={(e) => setForm({ ...form, stage: e.target.value })}
+              className={selectCls}
+            >
               {["Idea", "Validated"].map(s => <option key={s}>{s}</option>)}
             </select>
 
