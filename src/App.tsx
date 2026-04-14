@@ -24,12 +24,17 @@ function App() {
       {/* Navbar only on marketing pages */}
       {!isBare && <Navbar onOpenModal={() => setModalOpen(true)} />}
 
-      <Routes>
-        {/* ── Public ── */}
-        <Route path="/" element={<Home />} />
+<Routes>
+  <Route path="/" element={
+    <Home
+      modalOpen={modalOpen}
+      onOpenModal={() => setModalOpen(true)}
+      onCloseModal={() => setModalOpen(false)}
+    />
+  } />
 
-        {/* ── Admin── */}
-        <Route path="/admin" element={<AdminPanel />} />
+  {/* ── Admin── */}
+  <Route path="/admin" element={<AdminPanel />} />
 
         {/* ── Auth ── */}
         <Route path="/sign-in" element={<AuthPage />} />
