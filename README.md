@@ -1,4 +1,4 @@
-# 🚀 Codingo Forge Platform 
+# 🚀 Codingo Forge Platform  Website
 
 A full fledged web application for **Codingo Forge**, a platform that transforms startup ideas into structured projects with AI-powered intake, role-based dashboards, and real-time tracking.
 
