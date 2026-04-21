@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import PitchModal from './components/PitchModal';
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import AdminPanel from './pages/AdminPanel';
+import AdminRoute from './utils/AdminRoute';
 
 // Pages that should NOT show the marketing Navbar + Footer
 const BARE_ROUTES = ['/sign-in', '/sign-up', '/dashboard'];
@@ -33,8 +34,15 @@ function App() {
     />
   } />
 
-  {/* ── Admin── */}
-  <Route path="/admin" element={<AdminPanel />} />
+      {/* ── Admin── */}
+      <Route
+      path="/admin"
+      element={
+        <AdminRoute>
+          <AdminPanel />
+        </AdminRoute>
+      }
+    />
 
         {/* ── Auth ── */}
         <Route path="/sign-in" element={<AuthPage />} />

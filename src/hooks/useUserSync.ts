@@ -1,3 +1,4 @@
+//hooks/useUserSync.ts
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 

@@ -21,6 +21,36 @@ type DBUser = {
 type AdminTab = "account" | "team" | "security" | "notifications" | "preferences";
 type Toast = { id: string; type: "success" | "error"; message: string };
 
+// ─── useCurrentUser hook ──────────────────────────────────────────────────────
+
+function useCurrentUser() {
+  const { getToken, isSignedIn } = useAuth();
+  const [dbUser, setDbUser] = useState<DBUser | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isSignedIn) { setLoading(false); return; }
+
+    getToken().then(async (token) => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setDbUser(data.user);
+        }
+      } catch {
+        // silent fail
+      } finally {
+        setLoading(false);
+      }
+    });
+  }, [isSignedIn]);
+
+  return { dbUser, loading };
+}
+
 // ─── Toast ────────────────────────────────────────────────────────────────────
 
 function ToastStack({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id: string) => void }) {
@@ -223,7 +253,8 @@ function Avatar({ name, email }: { name: string; email: string }) {
 
 // ─── Tab: Account ─────────────────────────────────────────────────────────────
 
-function AccountTab({ user }: { user: any }) {
+// ✅ dbUser prop add kiya — role DB se aayega
+function AccountTab({ user, dbUser }: { user: any; dbUser: DBUser | null }) {
   return (
     <div className="space-y-6">
       <SectionHeader title="Account Information" subtitle="Your profile details synced from Clerk" />
@@ -239,9 +270,14 @@ function AccountTab({ user }: { user: any }) {
             <div>
               <p className="text-sm font-semibold text-white/90">{user?.fullName || "—"}</p>
               <p className="text-xs text-white/35 mt-0.5">{user?.primaryEmailAddress?.emailAddress}</p>
-              <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full mt-2">
-                <Crown size={8} /> Admin
-              </span>
+              {/* ✅ Hardcoded Admin badge hata diya — ab DB se role aata hai */}
+              <div className="mt-2">
+                {dbUser ? (
+                  <RoleBadge role={dbUser.role} />
+                ) : (
+                  <span className="inline-block h-5 w-16 bg-white/5 rounded-full animate-pulse" />
+                )}
+              </div>
             </div>
           </div>
 
@@ -447,7 +483,6 @@ function TeamTab({
 
                         {openMenu === u._id && (
                           <>
-                            {/* backdrop */}
                             <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
                             <div className="absolute right-0 top-9 w-48 bg-[#111125] border border-white/[0.08] rounded-xl shadow-2xl z-20 overflow-hidden">
                               {u.role === "user" && (
@@ -526,7 +561,6 @@ function TeamTab({
         </Card>
       </div>
 
-      {/* Confirm modal */}
       {confirmData && (
         <ConfirmModal
           title={
@@ -724,6 +758,9 @@ export default function AdminPanel() {
   const { user }     = useUser();
   const { getToken } = useAuth();
 
+  // ✅ DB se current user ka role fetch karo
+  const { dbUser } = useCurrentUser();
+
   const [activeTab, setActiveTab] = useState<AdminTab>("account");
   const [token,     setToken]     = useState<string | null>(null);
   const [toasts,    setToasts]    = useState<Toast[]>([]);
@@ -750,7 +787,8 @@ export default function AdminPanel() {
 
   const renderTab = () => {
     switch (activeTab) {
-      case "account":       return <AccountTab user={user} />;
+      // ✅ dbUser pass kiya AccountTab mein
+      case "account":       return <AccountTab user={user} dbUser={dbUser} />;
       case "team":          return <TeamTab apiUrl={API_URL} token={token} onToast={addToast} currentUserClerkId={user?.id ?? ""} />;
       case "security":      return <SecurityTab onToast={addToast} />;
       case "notifications": return <NotificationsTab onToast={addToast} />;
