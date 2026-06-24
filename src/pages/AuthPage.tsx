@@ -26,45 +26,50 @@ export default function AuthPage() {
       footerAction: { display: "none" },
 
       card: {
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.07)",
+        background: "linear-gradient(160deg, rgba(255,255,255,0.06) 0%, #0d2040 30%, #070f1d 100%)",
+        border: "1px solid rgba(255,255,255,0.08)",
         borderRadius: "20px",
-        boxShadow: "0 0 80px rgba(0,0,0,0.5), 0 0 40px rgba(124,92,252,0.05)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.3)",
         padding: "2rem",
       },
 
       socialButtonsBlockButton: {
         background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        border: "1px solid rgba(255,255,255,0.1)",
         borderRadius: "10px",
       },
       socialButtonsBlockButtonText: {
-        color: "#aaaacc",
+        color: "#dbeafe",
         fontWeight: "600",
       },
 
       dividerLine: { background: "rgba(255,255,255,0.07)" },
-      dividerText: { color: "#444466" },
+      dividerText: { color: "#6666aa" },
 
       formFieldLabel: {
-        color: "#6666aa",
+        color: "#8ab4ff",
         fontSize: "12px",
         letterSpacing: "0.05em",
         textTransform: "uppercase",
       },
       formFieldInput: {
-        background: "#13132a",
-        border: "1px solid rgba(255,255,255,0.07)",
+        background: "#0a1424",
+        border: "1px solid rgba(255,255,255,0.1)",
         borderRadius: "10px",
         color: "#ffffff",
       },
 
       formButtonPrimary: {
-        background: "linear-gradient(135deg, #7c5cfc 0%, #4f8ef7 100%)",
-        borderRadius: "10px",
-        fontWeight: "700",
-        boxShadow: "0 4px 24px rgba(124,92,252,0.35)",
+        background: "linear-gradient(135deg, #8ab4ff 0%, #5b8def 50%, #7c5cff 100%)",
+        borderRadius: "100px",
+        fontWeight: "900",
+        fontSize: "13px",
+        textTransform: "uppercase",
+        letterSpacing: "0.07em",
+        padding: "12px 20px",
+        boxShadow: "0 0 28px rgba(138,180,255,0.25)",
         border: "none",
+        fontFamily: "'DM Sans', sans-serif",
       },
 
       footerActionLink: { color: "#7c5cfc" },
@@ -88,7 +93,10 @@ export default function AuthPage() {
 
         .auth-root {
           min-height: 100vh;
-          background: #07070f;
+          background-image: url('/hero_bg.png');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -107,18 +115,7 @@ export default function AuthPage() {
           transform: translateX(-50%);
           width: 800px;
           height: 800px;
-          background: radial-gradient(circle, rgba(124,92,252,0.1) 0%, transparent 65%);
-          pointer-events: none;
-        }
-
-        .auth-root::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-          background-size: 40px 40px;
+          background: radial-gradient(circle, rgba(138,180,255,0.12) 0%, transparent 65%);
           pointer-events: none;
         }
 
@@ -162,13 +159,16 @@ export default function AuthPage() {
         .auth-title {
           font-size: 28px;
           font-weight: 900;
-          color: #ffffff;
+          background: linear-gradient(to right, #ffffff, #dbeafe, #8ab4ff);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
           letter-spacing: -0.04em;
           margin: 0 0 8px;
         }
         .auth-subtitle {
           font-size: 14px;
-          color: #444466;
+          color: rgba(255,255,255,0.7);
           margin: 0;
         }
 
@@ -183,16 +183,24 @@ export default function AuthPage() {
           display: none !important;
         }
 
+        .auth-clerk-wrap .cl-socialButtonsBlockButton svg {
+          fill: #ffffff !important;
+          color: #ffffff !important;
+        }
+        .auth-clerk-wrap .cl-socialButtonsBlockButton path {
+          fill: #ffffff !important;
+        }
+
         .auth-toggle {
           margin-top: 1.25rem;
           font-size: 13px;
-          color: #444466;
+          color: rgba(255,255,255,0.5);
           text-align: center;
         }
         .auth-toggle button {
           background: none;
           border: none;
-          color: #a78bfa;
+          color: #8ab4ff;
           font-weight: 700;
           font-size: 13px;
           font-family: 'DM Sans', sans-serif;
@@ -206,14 +214,14 @@ export default function AuthPage() {
           display: inline-block;
           margin-top: 1.5rem;
           font-size: 11px;
-          color: #2a2a44;
+          color: rgba(255,255,255,0.3);
           text-decoration: none;
           font-family: 'Space Mono', monospace;
           letter-spacing: 0.1em;
           text-transform: uppercase;
           transition: color 0.2s;
         }
-        .auth-back:hover { color: "#7c5cfc"; }
+        .auth-back:hover { color: #8ab4ff; }
       `}</style>
 
       <div className="auth-root">
@@ -221,11 +229,11 @@ export default function AuthPage() {
 
           <div className="auth-header">
             <a href="/" className="auth-logo-link">
-              <img src="/logo.jpeg" alt="CodingoForge" />
+              <img src="/logo.jpg" alt="CodingoForge" />
               <span className="auth-logo-name">CodingoForge</span>
             </a>
             <h1 className="auth-title">
-              {mode === "login" ? "Welcome back" : "Join CodingoForge"}
+              {mode === "login" ? "Welcome" : "Join CodingoForge"}
             </h1>
             <p className="auth-subtitle">
               {mode === "login"

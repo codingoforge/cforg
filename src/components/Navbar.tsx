@@ -18,13 +18,11 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
   }, []);
 
   const navLinks = [
-    { label: "Services", href: "#services" },
-    { label: "Work", href: "#work" },
-    { label: "Processes", href: "#processes" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "About", href: "#about" },
-    { label: "Careers", href: "#careers" },
-    { label: "Contact", href: "#contact" },
+    { label: "Solution", href: "/solution" },
+    { label: "Process", href: "/process" },
+    { label: "About", href: "/about" },
+    { label: "Career", href: "/career" },
+    { label: "Contact", href: "/conetect" },
   ];
 
   return (
@@ -45,29 +43,39 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
         }
 
         .cf-nav.scrolled {
-          background: rgba(8, 18, 34, 0.82);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-          border-bottom: 1px solid rgba(138, 180, 255, 0.14);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+          background: rgba(8, 18, 34, 0.92);
+          border-color: rgba(138, 180, 255, 0.22);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
         }
 
         .cf-nav.top {
-          background: rgba(10, 20, 36, 0.72);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          border-bottom: 1px solid rgba(138, 180, 255, 0.1);
+          position: fixed;
+          top: 16px;              /* float it down from top */
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 100;
+          font-family: 'DM Sans', sans-serif;
+          width: calc(100% - 48px);
+          max-width: 1100px;
+          border-radius: 999px;   /* full pill shape */
+          background: rgba(8, 18, 34, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(138, 180, 255, 0.14);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+          transition: all 0.3s ease;
+
         }
 
         .cf-nav-inner {
-          max-width: 1440px;
+          max-width: 100%;
           margin: 0 auto;
-          padding: 0 1.5rem;
-          height: 74px;
+          padding: 0 1.25rem;
+          height: 62px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 1rem;
+          gap: 0.75rem;
           flex-wrap: nowrap;
         }
 
@@ -147,12 +155,12 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           letter-spacing: 0.08em;
           text-transform: uppercase;
           padding: 10px 16px;
-          border-radius: 12px;
+          border-radius: 100px;
           border: 1px solid rgba(138, 180, 255, 0.18);
           background: rgba(255, 255, 255, 0.04);
           cursor: pointer;
           transition: all 0.25s ease;
-          font-family: 'Space Mono', monospace;
+          font-family: 'DM Sans', sans-serif;
           white-space: nowrap;
         }
 
@@ -170,7 +178,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           letter-spacing: 0.08em;
           text-transform: uppercase;
           padding: 11px 18px;
-          border-radius: 12px;
+          border-radius: 100px;
           border: none;
           background: linear-gradient(135deg, #8ab4ff 0%, #7c5cff 100%);
           cursor: pointer;
@@ -199,7 +207,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           background: rgba(255, 255, 255, 0.04);
           cursor: pointer;
           transition: all 0.25s ease;
-          font-family: 'Space Mono', monospace;
+          font-family: 'DM Sans', sans-serif;
           white-space: nowrap;
         }
 
@@ -217,7 +225,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           border: 1px solid rgba(34, 197, 94, 0.24);
           border-radius: 999px;
           padding: 7px 12px;
-          font-family: 'Space Mono', monospace;
+          font-family: 'DM Sans', sans-serif;
           font-size: 10px;
           letter-spacing: 0.11em;
           text-transform: uppercase;
@@ -335,8 +343,8 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
       <nav className={`cf-nav ${scrolled ? "scrolled" : "top"}`}>
         <div className="cf-nav-inner">
           <a href="/" className="cf-logo">
-            <img src="/logo.jpeg" alt="CodingoForge Logo" />
-            <span className="cf-logo-text">CodingoForge</span>
+            <img src="/logo.jpg" alt="CodingoForge Logo" />
+            <span className="cf-logo-text">Codingo Forge</span>
           </a>
 
           <ul className="cf-nav-links">
@@ -346,11 +354,6 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
               </li>
             ))}
           </ul>
-
-          <div className="cf-status-pill">
-            <span className="cf-status-dot" />
-            Accepting Projects
-          </div>
 
           <div className="cf-nav-actions">
             <SignedOut>
@@ -364,11 +367,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
 
-            <SignedOut>
-              <button type="button" className="cf-btn-primary" onClick={onOpenModal}>
-                Get Started →
-              </button>
-            </SignedOut>
+           
           </div>
 
           <button

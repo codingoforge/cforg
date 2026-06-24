@@ -1,6 +1,11 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import Home from './pages/Home';
+import Solution from './pages/Solution';
+import About from './pages/About';
+import Career from './pages/Career';
+import Process from './pages/Process';
+import Conetect from './pages/Conetect';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AuthPage from './pages/AuthPage';
@@ -33,6 +38,13 @@ function App() {
       onCloseModal={() => setModalOpen(false)}
     />
   } />
+  <Route path="/solution" element={
+    <Solution onOpenModal={() => setModalOpen(true)} />
+  } />
+  <Route path="/process" element={<Process />} />
+  <Route path="/about" element={<About />} />
+  <Route path="/career" element={<Career />} />
+  <Route path="/conetect" element={<Conetect />} />
 
       {/* ── Admin── */}
       <Route

@@ -438,7 +438,7 @@ export default function Footer() {
           <div className="cf-footer-top">
             <div className="cf-footer-brand">
               <a href="/" className="cf-footer-logo">
-                <img src="/logo.jpeg" alt="CodingoForge Logo" />
+                <img src="/logo.jpg" alt="CodingoForge Logo" />
                 <span className="cf-footer-logo-text">CodingoForge</span>
               </a>
 
@@ -446,10 +446,7 @@ export default function Footer() {
                 We turn founder ideas into launchable MVPs — designed for traction, built for scale.
               </p>
 
-              <div className="cf-footer-badge">
-                <span className="cf-footer-badge-dot" />
-                Accepting Projects · Est. 2026
-              </div>
+              
 
               <div className="cf-footer-socials">
                 <a
@@ -466,7 +463,7 @@ export default function Footer() {
 
             {Object.entries(footerLinks).map(([category, links]) => (
               <div key={category} className="cf-footer-col">
-                <p className="cf-footer-col-title">// {category.toLowerCase()}</p>
+                <p className="cf-footer-col-title">{category.toLowerCase()}</p>
                 <ul>
                   {links.map(({ label, modal }) => (
                     <li key={label}>

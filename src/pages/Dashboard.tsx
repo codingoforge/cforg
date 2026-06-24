@@ -1,12 +1,12 @@
-import { useUser, useAuth, UserButton } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useUser, useAuth, useClerk, UserButton } from "@clerk/clerk-react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, CreditCard, Settings,
   Bell, TrendingUp, Clock, CheckCircle2, ChevronRight,
   Star, RefreshCw, AlertCircle, User, Shield, Building2,
   ExternalLink, Receipt, Wallet, MessageSquare, ChevronDown,
-  Package, Truck, CheckCheck, FileText, Zap, Send,
+  Package, Truck, CheckCheck, FileText, Zap, Send, Edit3, Plus,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -111,6 +111,24 @@ const PHASES: { id: TrackingPhase; label: string; icon: any; desc: string; color
 
 const phaseIndex = (p?: TrackingPhase) => PHASES.findIndex((ph) => ph.id === p);
 
+// ─── Glass card wrapper ───────────────────────────────────────────────────────
+function GlassCard({ children, className = "", hover = false, glow = false, onClick }: any) {
+  return (
+    <div
+      onClick={onClick}
+      className={`relative overflow-hidden rounded-2xl border border-white/[0.08] ${
+        hover ? "hover:border-white/[0.14] hover:scale-[1.01] transition-all duration-200" : ""
+      } ${glow ? "shadow-[0_0_40px_-8px_rgba(79,142,247,0.15)]" : "shadow-[0_8px_32px_rgba(0,0,0,0.4)]"} ${className}`}
+      style={{
+        background: "linear-gradient(160deg, #0d2040 0%, #070f1d 100%)",
+      }}
+    >
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
+      {children}
+    </div>
+  );
+}
+
 // ─── Small helpers ────────────────────────────────────────────────────────────
 
 function EmptyState({ icon: Icon, title, subtitle }: { icon: any; title: string; subtitle: string }) {
@@ -135,7 +153,7 @@ function SkeletonRows() {
 
 function StatCard({ label, value, icon: Icon, color, bg, delta }: any) {
   return (
-    <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 hover:border-white/10 transition-colors">
+    <GlassCard className="p-5" hover>
       <div className="flex items-start justify-between mb-4">
         <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center`}>
           <Icon size={16} className={color} />
@@ -144,7 +162,7 @@ function StatCard({ label, value, icon: Icon, color, bg, delta }: any) {
       </div>
       <p className="text-3xl font-bold text-white/90 mb-1">{value}</p>
       <p className="text-xs text-white/35">{label}</p>
-    </div>
+    </GlassCard>
   );
 }
 
@@ -174,7 +192,7 @@ function ProjectTrackingBar({
   };
 
   return (
-    <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden">
+    <GlassCard className="overflow-hidden">
       {/* Header */}
       <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -390,7 +408,7 @@ function ProjectTrackingBar({
           )}
         </div>
       )}
-    </div>
+    </GlassCard>
   );
 }
 
@@ -457,6 +475,87 @@ function ProjectRows({
   );
 }
 
+// ─── Quick Notes ──────────────────────────────────────────────────────────────
+type QuickNote = { id: string; text: string; author: string; date: Date };
+
+function QuickNotes() {
+  const [notes, setNotes] = useState<QuickNote[]>([
+    { id: "1", text: "Please update the dashboard with the new sales metrics.", author: "You", date: new Date(Date.now() - 86400000 * 2) },
+    { id: "2", text: "API integration for payment gateway is under development.", author: "Arjun Patel", date: new Date(Date.now() - 86400000) },
+  ]);
+  const [input, setInput] = useState("");
+  const { user } = useUser();
+
+  const addNote = () => {
+    if (!input.trim()) return;
+    const note: QuickNote = {
+      id: Date.now().toString(),
+      text: input.trim(),
+      author: user?.firstName ? `${user.firstName} ${user.lastName ?? ""}` : "You",
+      date: new Date(),
+    };
+    setNotes(prev => [note, ...prev]);
+    setInput("");
+  };
+
+  return (
+    <GlassCard className="overflow-hidden">
+      <div className="px-5 py-4 border-b border-white/[0.06] flex items-center gap-2">
+        <Edit3 size={14} className="text-violet-400" />
+        <p className="text-xs text-white/40 font-medium uppercase tracking-wider flex-1">Quick Notes</p>
+        <span className="text-[10px] text-white/25">{notes.length}</span>
+      </div>
+
+      <div className="px-5 py-3 border-b border-white/[0.06]">
+        <div className="flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addNote()}
+            placeholder="Add a note, request update, or share feedback..."
+            className="flex-1 rounded-xl px-3 py-2 text-xs text-white/70 placeholder-white/20 focus:outline-none transition-all"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+          />
+          <button
+            onClick={addNote}
+            disabled={!input.trim()}
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            style={{ background: "linear-gradient(135deg, #4F8EF7, #7C5CFC)", color: "#fff" }}
+          >
+            <Plus size={13} /> Post
+          </button>
+        </div>
+      </div>
+
+      <div className="max-h-64 overflow-y-auto px-5 py-2 space-y-2">
+        {notes.length === 0 ? (
+          <p className="text-xs text-white/25 text-center py-6">No notes yet. Post the first update!</p>
+        ) : (
+          notes.map((note) => {
+            const isYou = note.author === "You" || note.author.startsWith(user?.firstName ?? "____");
+            const hours = Math.floor((Date.now() - note.date.getTime()) / 3600000);
+            const timeStr = hours < 1 ? "Just now" : hours < 24 ? `${hours}h ago` : `${Math.floor(hours / 24)}d ago`;
+            return (
+              <div key={note.id} className="flex gap-2.5 rounded-xl px-3.5 py-2.5" style={{ background: isYou ? "rgba(79,142,247,0.06)" : "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                <div className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center text-[10px] font-bold mt-0.5" style={{ background: isYou ? "rgba(79,142,247,0.15)" : "rgba(124,92,252,0.15)", color: isYou ? "#4F8EF7" : "#7C5CFC" }}>
+                  {note.author.split(" ").map(s => s[0]).join("").slice(0, 2).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[11px] font-medium text-white/60">{note.author}</span>
+                    <span className="text-[9px] text-white/20">{timeStr}</span>
+                  </div>
+                  <p className="text-xs text-white/70 leading-relaxed">{note.text}</p>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </GlassCard>
+  );
+}
+
 // ─── Sections ─────────────────────────────────────────────────────────────────
 
 function OverviewSection({
@@ -487,6 +586,8 @@ function OverviewSection({
         <StatCard label="Completed"      value={loading ? "—" : completed}        icon={CheckCircle2} color="text-blue-400"    bg="bg-blue-400/10"   delta="Delivered"   />
       </div>
 
+      <QuickNotes />
+
       {/* Project Tracking */}
       {!loading && featuredProject && (
         <ProjectTrackingBar
@@ -497,15 +598,15 @@ function OverviewSection({
         />
       )}
       {loading && (
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-6">
+        <GlassCard className="p-6">
           <div className="space-y-3">
             <div className="h-4 w-40 bg-white/[0.05] rounded animate-pulse" />
             <div className="h-16 bg-white/[0.05] rounded-xl animate-pulse" />
           </div>
-        </div>
+        </GlassCard>
       )}
 
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden">
+      <GlassCard className="overflow-hidden">
         <div className="px-6 py-4 border-b border-white/[0.06] flex items-center gap-2">
           <FolderKanban size={15} className="text-violet-400" />
           <h2 className="text-sm font-medium text-white/80">Recent Projects</h2>
@@ -513,7 +614,7 @@ function OverviewSection({
         {loading ? <SkeletonRows /> : projects.length === 0
           ? <EmptyState icon={FolderKanban} title="No projects yet" subtitle="Your projects will appear here" />
           : <ProjectRows projects={projects.slice(0, 3)} isAdmin={isAdmin} onPhaseChange={onPhaseChange} onAddComment={onAddComment} />}
-      </div>
+      </GlassCard>
     </div>
   );
 }
@@ -539,7 +640,7 @@ function ProjectsSection({
 
   return (
     <div className="space-y-5">
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden">
+      <GlassCard className="overflow-hidden">
         <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FolderKanban size={15} className="text-violet-400" />
@@ -626,7 +727,7 @@ function ProjectsSection({
               })}
             </div>
           )}
-      </div>
+      </GlassCard>
     </div>
   );
 }
@@ -637,22 +738,22 @@ function PaymentsSection({ payments, loading, onRefresh }: { payments: Payment[]
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5">
+        <GlassCard className="p-5">
           <div className="flex items-center gap-2 mb-3">
             <Wallet size={15} className="text-emerald-400" />
             <span className="text-xs text-white/40">Total Paid</span>
           </div>
           <p className="text-2xl font-bold text-emerald-400">₹{totalPaid.toLocaleString("en-IN")}</p>
-        </div>
-        <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-5">
+        </GlassCard>
+        <GlassCard className="p-5">
           <div className="flex items-center gap-2 mb-3">
             <Receipt size={15} className="text-amber-400" />
             <span className="text-xs text-white/40">Pending</span>
           </div>
           <p className="text-2xl font-bold text-amber-400">₹{totalPending.toLocaleString("en-IN")}</p>
-        </div>
+        </GlassCard>
       </div>
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden">
+      <GlassCard className="overflow-hidden">
         <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CreditCard size={15} className="text-violet-400" />
@@ -693,56 +794,63 @@ function PaymentsSection({ payments, loading, onRefresh }: { payments: Payment[]
               })}
             </div>
           )}
-      </div>
+      </GlassCard>
     </div>
   );
 }
 
 function SettingsSection({ userData, loading }: { userData: UserData | null; loading: boolean }) {
+  const { user } = useUser();
+  const { openUserProfile } = useClerk();
   return (
     <div className="space-y-6">
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-6">
-        <h2 className="text-sm font-medium text-white/80 mb-4 flex items-center gap-2">
-          <Settings size={14} className="text-violet-400" />
-          Account Info
-        </h2>
+      <GlassCard className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-medium text-white/80 flex items-center gap-2">
+            <User size={14} className="text-violet-400" /> Manage Account
+          </h2>
+          <button
+            onClick={() => openUserProfile()}
+            className="flex items-center gap-1.5 text-xs text-violet-400 bg-violet-500/10 border border-violet-500/20 px-3 py-1.5 rounded-lg hover:bg-violet-500/15 transition-colors"
+          >
+            <ExternalLink size={12} /> Manage
+          </button>
+        </div>
         {loading ? (
-          <div className="space-y-2">
-            {[70, 80, 60].map((w, i) => (
-              <div key={i} className="h-4 bg-white/[0.05] rounded animate-pulse" style={{ width: `${w}%` }} />
-            ))}
-          </div>
-        ) : userData ? (
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { label: "Clerk ID",     value: userData.clerkId,        icon: User      },
-              { label: "Role",         value: userData.role || "user", icon: Shield    },
-              { label: "Organisation", value: userData.orgId || "N/A", icon: Building2 },
-            ].map(item => (
-              <div key={item.label} className="bg-white/[0.03] rounded-lg px-4 py-3 border border-white/[0.05]">
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  <item.icon size={10} className="text-white/20" />
-                  <p className="text-[10px] uppercase tracking-widest text-white/25">{item.label}</p>
-                </div>
-                <p className="text-sm text-white/70 font-mono truncate">{item.value}</p>
-              </div>
-            ))}
+          <div className="space-y-3">
+            <div className="h-10 bg-white/[0.05] rounded animate-pulse" />
+            <div className="h-10 bg-white/[0.05] rounded animate-pulse" />
           </div>
         ) : (
-          <div className="flex items-center gap-2 text-red-400/80">
-            <AlertCircle size={14} />
-            <p className="text-sm">Failed to load user data</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white/[0.04] rounded-lg px-4 py-3 border border-white/[0.05]">
+              <p className="text-[10px] uppercase tracking-widest text-white/25 mb-1">Name</p>
+              <p className="text-sm text-white/80">{user?.firstName} {user?.lastName}</p>
+            </div>
+            <div className="bg-white/[0.04] rounded-lg px-4 py-3 border border-white/[0.05]">
+              <p className="text-[10px] uppercase tracking-widest text-white/25 mb-1">Email</p>
+              <p className="text-sm text-white/80 truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+            </div>
+            <div className="bg-white/[0.04] rounded-lg px-4 py-3 border border-white/[0.05]">
+              <p className="text-[10px] uppercase tracking-widest text-white/25 mb-1">Role</p>
+              <p className="text-sm text-white/80">{userData?.role ?? "user"}</p>
+            </div>
+            <div className="bg-white/[0.04] rounded-lg px-4 py-3 border border-white/[0.05]">
+              <p className="text-[10px] uppercase tracking-widest text-white/25 mb-1">Organisation</p>
+              <p className="text-sm text-white/80">{userData?.orgId ?? "N/A"}</p>
+            </div>
           </div>
         )}
-      </div>
-      <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-6">
+      </GlassCard>
+
+      <GlassCard className="p-6">
         <h2 className="text-sm font-medium text-white/80 mb-3 flex items-center gap-2">
           <Shield size={14} className="text-violet-400" /> Security
         </h2>
-        <p className="text-xs text-white/30 leading-relaxed">
+        <p className="text-xs text-white/30 leading-relaxed mb-4">
           Manage your password, connected accounts, and two-factor authentication through Clerk's account portal.
         </p>
-      </div>
+      </GlassCard>
     </div>
   );
 }
@@ -898,7 +1006,7 @@ export default function Dashboard() {
             className="flex items-center gap-2.5 hover:opacity-80 transition-opacity w-full text-left"
           >
             <img
-              src="/logo.jpeg"
+              src="/logo.jpg"
               alt="CodingoForge"
               className="w-8 h-8 rounded-full object-cover border border-violet-500/30 shrink-0"
             />

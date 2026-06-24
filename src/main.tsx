@@ -17,6 +17,11 @@ function ClerkWithRouter() {
       signUpUrl="/sign-up"
       afterSignInUrl="/dashboard"
       afterSignUpUrl="/dashboard"
+      appearance={{
+        layout: {
+          socialButtonsVariant: "blockButton",
+        },
+      }}
     >
       <App />
     </ClerkProvider>
