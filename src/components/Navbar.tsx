@@ -91,8 +91,9 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
         .cf-logo img {
           width: 42px;
           height: 42px;
-          border-radius: 50%;
-          object-fit: cover;
+          border-radius: 8px;
+          object-fit: contain;
+          background: #fff;
           border: 1px solid rgba(138, 180, 255, 0.2);
           box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
         }
@@ -343,7 +344,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
       <nav className={`cf-nav ${scrolled ? "scrolled" : "top"}`}>
         <div className="cf-nav-inner">
           <a href="/" className="cf-logo">
-            <img src="/logo.jpg" alt="CodingoForge Logo" />
+            <img src="/navbar-logo.png" alt="CodingoForge Logo" />
             <span className="cf-logo-text">Codingo Forge</span>
           </a>
 
