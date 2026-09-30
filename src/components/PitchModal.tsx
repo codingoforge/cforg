@@ -4,14 +4,15 @@ import { X } from "lucide-react";
 
 interface PitchModalProps {
   onClose: () => void;
+  initialIdea?: string;
 }
 
-export default function PitchModal({ onClose }: PitchModalProps) {
+export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProps) {
   const [form, setForm] = useState({
     name: "",
     email: "",
     startup: "",
-    idea: "",
+    idea: initialIdea,
     stage: "Idea",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -41,12 +42,13 @@ export default function PitchModal({ onClose }: PitchModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[110] flex items-center justify-center p-4"
+      role="dialog" aria-modal="true" aria-label="Pitch your idea"
       onClick={(e) => e.target === e.currentTarget && onClose()}
       style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
     >
       <div
-        className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/[0.08]"
+        className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/[0.08]"
         style={{ background: "linear-gradient(160deg, #0d2040 0%, #070f1d 100%)" }}
       >
         <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
@@ -57,7 +59,7 @@ export default function PitchModal({ onClose }: PitchModalProps) {
           <span className="text-[11px] uppercase tracking-[0.12em] text-[#8ab4ff]" style={{ fontFamily: "'Space Mono',monospace" }}>
             pitch_intake
           </span>
-          <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/[0.08] transition-colors" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <button aria-label="Close enquiry" onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/[0.08] transition-colors" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <X size={13} className="text-white/40" />
           </button>
         </div>
