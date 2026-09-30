@@ -20,6 +20,8 @@ const BARE_ROUTES = ['/sign-in', '/sign-up', '/dashboard'];
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
+  const [initialIdea, setInitialIdea] = useState("");
+  const openPitch = (idea = "") => { setInitialIdea(idea); setModalOpen(true); };
   const location = useLocation();
 
   const isBare = BARE_ROUTES.some((r) => location.pathname.startsWith(r));
@@ -28,18 +30,17 @@ function App() {
     <div className="min-h-screen bg-[#080808] text-white">
 
       {/* Navbar only on marketing pages */}
-      {!isBare && <Navbar onOpenModal={() => setModalOpen(true)} />}
+      {!isBare && <Navbar onOpenModal={() => openPitch()} />}
 
 <Routes>
   <Route path="/" element={
     <Home
-      modalOpen={modalOpen}
-      onOpenModal={() => setModalOpen(true)}
-      onCloseModal={() => setModalOpen(false)}
+      onOpenModal={() => openPitch()}
+      onUseBrief={openPitch}
     />
   } />
   <Route path="/solution" element={
-    <Solution onOpenModal={() => setModalOpen(true)} />
+    <Solution onOpenModal={() => openPitch()} />
   } />
   <Route path="/process" element={<Process />} />
   <Route path="/about" element={<About />} />
@@ -79,7 +80,7 @@ function App() {
       {/* Footer only on marketing pages */}
       {!isBare && <Footer />}
 
-      {modalOpen && <PitchModal onClose={() => setModalOpen(false)} />}
+      {modalOpen && <PitchModal initialIdea={initialIdea} onClose={() => setModalOpen(false)} />}
     </div>
   );
 }
