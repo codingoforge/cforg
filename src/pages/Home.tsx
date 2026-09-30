@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import PitchModal from "../components/PitchModal";
+import ProjectAssistant from "../components/ProjectAssistant";
 import { Bot, LayoutGrid, Warehouse, Shield, Wrench, Rocket } from "lucide-react";
 
 const ICON_MAP: Record<string, any> = { Bot, LayoutGrid, Warehouse, Shield, Wrench, Rocket };
@@ -61,12 +61,11 @@ const NoiseBg = () => (
 );
 
 interface HomeProps {
-  modalOpen: boolean;
   onOpenModal: () => void;
-  onCloseModal: () => void;
+  onUseBrief: (idea: string) => void;
 }
 
-export default function Home({ modalOpen, onOpenModal, onCloseModal }: HomeProps) {
+export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
   const heroRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -279,69 +278,9 @@ export default function Home({ modalOpen, onOpenModal, onCloseModal }: HomeProps
             
           </div>
         
- <div className="fade-up delay-3 w-full max-w-2xl">
-  <div className="absolute 
-    -top-10 left-1/2 -translate-x-1/2
-    w-[420px] h-[180px]
-    bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.25),_rgba(139,92,246,0.15),_transparent_70%)]
-    blur-[90px] opacity-80 pointer-events-none">
-  </div>
-  <div className="relative bg-[#0b1628] border border-white/10 rounded-2xl p-8 shadow-2xl">
-    <div className="flex items-center justify-between mb-5">
-      <h3 className="text-xl font-black text-white tracking-tight">AI-Powered Prompt Box</h3>
-      <span className="ai-badge">AI Assistant →</span>
-    </div>
+ <ProjectAssistant onUseBrief={onUseBrief} />
+        </div>
 
-    <div className="bg-[#0a1424] border border-white/10 rounded-xl p-3 flex items-end gap-3 focus-within:border-[#8ab4ff] transition-colors">
-      <textarea
-        placeholder="Describe your needs..."
-        rows={2}
-        className="flex-1 bg-transparent border-none outline-none text-white text-sm placeholder-white/35 resize-none leading-relaxed"
-      />
-      <button
-        className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all hover:opacity-85"
-        style={{ background: "linear-gradient(135deg,#8ab4ff,#7c5cff)" }}
-        onClick={onOpenModal}
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="12" y1="19" x2="12" y2="5" />
-          <polyline points="5 12 12 5 19 12" />
-        </svg>
-      </button>
-      {/* Gradient glow above the AI prompt box */}
-<div
-  className="absolute -top-16 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none"
-  style={{
-    background: "linear-gradient(to bottom, rgba(138,180,255,0.18), transparent)",
-    filter: "blur(24px)",
-    borderRadius: "50%",
-  }}
-/>
-    </div>
-
-    <div className="flex flex-wrap gap-2 mt-4 justify-center">
-      {["AI CRM", "ERP Platform", "MVP 4 Weeks"].map((chip) => (
-        <span
-          key={chip}
-          className="text-xs px-3 py-1.5 rounded-full cursor-pointer transition-all hover:bg-[#8ab4ff] hover:text-[#07111f]"
-          style={{
-            background: "rgba(138,180,255,0.08)",
-            border: "1px solid rgba(138,180,255,0.18)",
-            color: "#dbeafe",
-            fontFamily: "'Space Mono',monospace",
-            letterSpacing: "0.05em",
-          }}
-          onClick={onOpenModal}
-        >
-          {chip}
-        </span>
-      ))}
-     </div>
-    </div>
-  </div>
-</div>
-
-        
       </section>
 
     
@@ -512,7 +451,7 @@ export default function Home({ modalOpen, onOpenModal, onCloseModal }: HomeProps
         
       </section>
 
-      {modalOpen && <PitchModal onClose={onCloseModal} />}
+
     </div>
   );
 }
