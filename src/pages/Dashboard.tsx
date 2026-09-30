@@ -1,10 +1,10 @@
 import { useUser, useAuth, useClerk, UserButton } from "@clerk/clerk-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, FolderKanban, CreditCard, Settings,
   Bell, TrendingUp, Clock, CheckCircle2, ChevronRight,
-  Star, RefreshCw, AlertCircle, User, Shield, Building2,
+  Star, RefreshCw, AlertCircle, User, Shield,
   ExternalLink, Receipt, Wallet, MessageSquare, ChevronDown,
   Package, Truck, CheckCheck, FileText, Zap, Send, Edit3, Plus,
 } from "lucide-react";
@@ -636,7 +636,6 @@ function ProjectsSection({
 }) {
   const isAdmin = userData?.role === "admin" || userData?.role === "employee";
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const selectedProject = projects.find(p => p._id === selectedProjectId);
 
   return (
     <div className="space-y-5">
