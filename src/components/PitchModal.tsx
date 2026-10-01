@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import emailjs from "@emailjs/browser";
 import { X } from "lucide-react";
 
@@ -17,26 +17,49 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.startup) return;
+  const [error, setError] = useState("");
+  const submitting = useRef(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (submitting.current || status === "sent") return;
+    const details = Object.fromEntries(Object.entries(form).map(([key, value]) => [key, value.trim()]));
+    if (!details.name || !details.email || !details.startup || !details.idea) {
+      setError("Please complete your name, email, project name and idea.");
+      setStatus("error");
+      return;
+    }
+    if (!import.meta.env.VITE_EMAILJS_SERVICE_ID || !import.meta.env.VITE_EMAILJS_TEMPLATE_ID || !import.meta.env.VITE_EMAILJS_PUBLIC_KEY) {
+      setError("Our enquiry service is not configured yet. Please email codingoforge@gmail.com.");
+      setStatus("error");
+      return;
+    }
+    submitting.current = true;
+    setError("");
     setStatus("sending");
     try {
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         {
-          from_name: form.name,
-          from_email: form.email,
-          email: form.email,
-          startup: form.startup,
-          idea: form.idea,
-          stage: form.stage,
+          from_name: details.name,
+          from_email: details.email,
+          email: details.email,
+          startup: details.startup,
+          idea: details.idea,
+          stage: details.stage,
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
       setStatus("sent");
-    } catch {
+    } catch (cause) {
+      const code = cause && typeof cause === "object" && "status" in cause ? Number(cause.status) : 0;
+      setError(code === 429
+        ? "Too many enquiries right now. Please wait a minute and try again, or email codingoforge@gmail.com."
+        : `Your pitch was not sent${code ? ` (delivery error ${code})` : ""}. Your details are still here. Please retry or email codingoforge@gmail.com.`);
       setStatus("error");
+    } finally {
+      submitting.current = false;
     }
   };
 
@@ -65,61 +88,71 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
         </div>
 
         {/* BODY */}
-        <div className="p-6 space-y-5 relative z-10">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 relative z-10">
           <div>
             <h2 className="text-2xl font-black text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>Pitch Your Idea</h2>
             <p className="text-sm mt-1" style={{ color: "rgba(255,255,255,0.5)" }}>Fill in the details and we'll get back to you.</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <p className="text-xs text-white/60">All fields are required. We will email you about your project.</p>
+          <fieldset disabled={status === "sending" || status === "sent"} className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Full Name</label>
+              <label htmlFor="pitch-name" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Full Name</label>
               <input
                 className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/20 focus:outline-none transition-all"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#fff" }}
                 placeholder="Your name"
+                id="pitch-name" name="name" required
+                maxLength={160}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
             </div>
             <div>
-              <label className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Email</label>
+              <label htmlFor="pitch-email" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Email</label>
               <input
                 className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/20 focus:outline-none transition-all"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#fff" }}
                 type="email"
                 placeholder="you@example.com"
+                id="pitch-email" name="email" required
+                maxLength={254}
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Startup / Project Name</label>
+              <label htmlFor="pitch-startup" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Startup / Project Name</label>
               <input
                 className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/20 focus:outline-none transition-all"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#fff" }}
                 placeholder="Your startup or project"
+                id="pitch-startup" name="startup" required
+                maxLength={160}
                 value={form.startup}
                 onChange={(e) => setForm({ ...form, startup: e.target.value })}
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Describe Your Idea</label>
+              <label htmlFor="pitch-idea" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Describe Your Idea</label>
               <textarea
                 className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/20 focus:outline-none transition-all resize-none h-24"
                 style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#fff" }}
                 placeholder="Tell us about what you want to build..."
+                id="pitch-idea" name="idea" required
+                maxLength={10000}
                 value={form.idea}
                 onChange={(e) => setForm({ ...form, idea: e.target.value })}
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Stage</label>
+              <label htmlFor="pitch-stage" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Stage</label>
               <div className="relative">
                 <select
                   className="w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none transition-all appearance-none"
                   style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#fff", paddingRight: "2rem" }}
-                  value={form.stage}
+                  id="pitch-stage" name="stage" required
+                value={form.stage}
                   onChange={(e) => setForm({ ...form, stage: e.target.value })}
                 >
                   <option value="Idea">Idea</option>
@@ -134,10 +167,10 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
                 </div>
               </div>
             </div>
-          </div>
+          </fieldset>
 
           <button
-            onClick={handleSubmit}
+            type="submit"
             disabled={status === "sending" || status === "sent"}
             className="w-full text-white font-black py-3.5 rounded-full uppercase text-[13px] tracking-[0.07em] transition-all hover:opacity-92 hover:-translate-y-0.5 disabled:opacity-50"
             style={{ background: "linear-gradient(135deg,#8ab4ff 0%,#5b8def 50%,#7c5cff 100%)", boxShadow: "0 0 28px rgba(138,180,255,0.25)", fontFamily: "'DM Sans', sans-serif" }}
@@ -146,16 +179,16 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
           </button>
 
           {status === "sent" && (
-            <p className="text-center text-xs text-emerald-400" style={{ fontFamily: "'Space Mono',monospace" }}>
-              Message sent to codingoforge@gmail.com
+            <p role="status" className="text-center text-xs text-emerald-400" style={{ fontFamily: "'Space Mono',monospace" }}>
+              Your pitch has been submitted. Thank you — our team will follow up by email.
             </p>
           )}
           {status === "error" && (
-            <p className="text-center text-xs text-red-400" style={{ fontFamily: "'Space Mono',monospace" }}>
-              Something went wrong. Please try again.
+            <p role="alert" className="text-center text-xs text-red-400" style={{ fontFamily: "'Space Mono',monospace" }}>
+              {error}
             </p>
           )}
-        </div>
+        </form>
       </div>
     </div>
   );
