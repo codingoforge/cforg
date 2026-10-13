@@ -181,8 +181,9 @@ export default function Footer() {
         .cf-footer-logo img {
           width: 40px;
           height: 40px;
-          border-radius: 999px;
-          object-fit: cover;
+          border-radius: 8px;
+          object-fit: contain;
+          background: #fff;
           border: 1px solid rgba(138, 180, 255, 0.2);
           box-shadow: 0 10px 24px rgba(0,0,0,0.25);
         }
@@ -438,7 +439,7 @@ export default function Footer() {
           <div className="cf-footer-top">
             <div className="cf-footer-brand">
               <a href="/" className="cf-footer-logo">
-                <img src="/logo.jpg" alt="CodingoForge Logo" />
+                <img src="/navbar-logo.png" alt="Codingo Forge Logo" />
                 <span className="cf-footer-logo-text">CodingoForge</span>
               </a>
 
