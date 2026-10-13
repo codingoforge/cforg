@@ -233,7 +233,7 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
 
       <section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col justify-center pt-16 overflow-hidden"
+        className="relative min-h-svh flex flex-col justify-center pt-24 sm:pt-16 overflow-hidden"
         style={{
           backgroundImage: "url('/hero_bg.png')",
           backgroundSize: "cover",
@@ -242,26 +242,26 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
         }}
       >
 
-        <div className="relative max-w-4xl mx-auto px-6 py-24 flex flex-col items-center text-center gap-10">
-          <div className="space-y-8">
-            <div className="flex items-center justify-center gap-3 mb-6">
-  
-  <div className="px-4 py-1 rounded-full bg-white/10 border border-white/20 text-sm text-white/80">
+        <div className="relative w-full min-w-0 max-w-6xl mx-auto px-5 sm:px-6 py-10 sm:py-24 flex flex-col items-center text-center gap-8 sm:gap-10">
+          <div className="w-full min-w-0 space-y-6 sm:space-y-8">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6">
+
+  <div className="px-3 sm:px-4 py-1 rounded-full bg-white/10 border border-white/20 text-sm text-white/80">
     AI-Powered
   </div>
 
-  <div className="px-4 py-1 rounded-full bg-green-500/10 border border-green-400/30 text-sm text-green-400">
+  <div className="px-3 sm:px-4 py-1 rounded-full bg-green-500/10 border border-green-400/30 text-sm text-green-400">
   <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
       Accepting Projects
   </div>
 
 </div>
 
-        <h1 className="text-5xl md:text-7xl font-medium text-center 
-            bg-gradient-to-r from-white via-blue-100 to-blue-400 
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-medium text-center
+            bg-gradient-to-r from-white via-blue-100 to-blue-400
             bg-clip-text text-transparent leading-[1.1]">
 
-            <span className="block whitespace-nowrap">
+            <span className="block text-balance">
               Build Modern Tech Solutions
             </span>
             <span className="block">
@@ -275,31 +275,31 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
               Custom web apps for CRM, ERP, warehouse, IT tools, and rapid MVPs.
             </p>
 
-            
+
           </div>
-        
+
  <ProjectAssistant onUseBrief={onUseBrief} />
         </div>
 
       </section>
 
-    
 
-      <section id="services" className="max-w-7xl mx-auto px-6 py-20">
+
+      <section id="services" className="max-w-7xl mx-auto px-5 sm:px-6 py-12 sm:py-20">
         <div className="mb-12 flex flex-col items-center text-center gap-4">
           <div>
-          
-           <h2 className="text-5xl md:text-7xl font-medium text-center 
-            bg-gradient-to-r from-white via-blue-100 to-blue-400 
+
+           <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium text-center
+            bg-gradient-to-r from-white via-blue-100 to-blue-400
             bg-clip-text text-transparent leading-[1.1] mx-auto">
               What We Build
            </h2>
-          
+
 
           </div>
-          
+
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
           {SERVICES.map(({ title, desc, tag, icon }) => {
             const IconComponent = ICON_MAP[icon];
             return (
@@ -313,15 +313,15 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
               }}
             >
 
-            
+
            <div className="absolute top-0 left-0 right-0 h-px"
             style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
-           
+
            <div className="w-14 h-14 rounded-full mb-8 flex items-center justify-center"
             style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
               {IconComponent && <IconComponent size={22} className="text-white/50" />}
             </div>
-            
+
             {tag && (
               <div
                   className="absolute top-5 right-5 rounded-full"
@@ -353,11 +353,11 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
         </div>
       </section>
 
-      <section id="work" className="max-w-7xl mx-auto px-6 py-20">
+      <section id="work" className="max-w-7xl mx-auto px-5 sm:px-6 py-12 sm:py-20">
         <div className="mb-12 text-center">
-          
-          <h2 className="text-5xl md:text-7xl font-medium text-center 
-            bg-gradient-to-r from-white via-blue-100 to-blue-400 
+
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium text-center
+            bg-gradient-to-r from-white via-blue-100 to-blue-400
             bg-clip-text text-transparent leading-[1.1] mx-auto">
               Testimonial
            </h2>
@@ -377,8 +377,8 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
 
               <div className="absolute top-0 left-0 right-0 h-px"
             style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
-          
-          
+
+
 
               <p className="text-white/80 leading-relaxed">“{item.text}”</p>
               <div className="mt-6">
@@ -388,12 +388,12 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
             </div>
           ))}
         </div>
-        
+
       </section>
-      <section id="powered-by" className="max-w-7xl mx-auto px-6 py-20">
+      <section id="powered-by" className="max-w-7xl mx-auto px-5 sm:px-6 py-12 sm:py-20">
         <div className="mb-12 text-center">
-          <h2 className="text-5xl md:text-7xl font-medium text-center 
-            bg-gradient-to-r from-white via-blue-100 to-blue-400 
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium text-center
+            bg-gradient-to-r from-white via-blue-100 to-blue-400
             bg-clip-text text-transparent leading-[1.1] mx-auto">
               Powered By
           </h2>
@@ -418,10 +418,10 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
       </section>
 
 
-      <section id="contact" className="max-w-7xl mx-auto px-6 py-24">
-        
-        
-        <div className="relative bg-[#0b1628] border border-white/10 rounded-2xl p-12 md:p-16 overflow-hidden text-center">
+      <section id="contact" className="max-w-7xl mx-auto px-5 sm:px-6 py-12 sm:py-24">
+
+
+        <div className="relative bg-[#0b1628] border border-white/10 rounded-2xl px-5 py-10 sm:p-12 md:p-16 overflow-hidden text-center">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{  background: "linear-gradient(160deg, #0d2040 0%, #070f1d 100%)",
@@ -431,11 +431,11 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
           <div className="absolute top-0 left-0 right-0 h-px"
             style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
           <div className="relative space-y-6">
-            
-            <h2 className="text-5xl md:text-7xl font-medium text-center 
-            bg-gradient-to-r from-white via-blue-100 to-blue-400 
+
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium text-center
+            bg-gradient-to-r from-white via-blue-100 to-blue-400
             bg-clip-text text-transparent leading-[1.1] mx-auto">
-              Ready to Build? 
+              Ready to Build?
               <br/>
               Let's Talk.
            </h2>
@@ -443,12 +443,12 @@ export default function Home({ onOpenModal, onUseBrief }: HomeProps) {
               AI-powered assessment. Dashboard access & proposal in 24 hours.
             </p>
             <button onClick={onOpenModal} className="btn-primary">
-              Get Started → 
+              Get Started →
             </button>
-            
+
           </div>
         </div>
-        
+
       </section>
 
 

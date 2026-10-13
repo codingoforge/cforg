@@ -71,7 +71,7 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
       style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
     >
       <div
-        className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/[0.08]"
+        className="relative w-full max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/[0.08]"
         style={{ background: "linear-gradient(160deg, #0d2040 0%, #070f1d 100%)" }}
       >
         <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" }} />
@@ -82,7 +82,7 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
           <span className="text-[11px] uppercase tracking-[0.12em] text-[#8ab4ff]" style={{ fontFamily: "'Space Mono',monospace" }}>
             pitch_intake
           </span>
-          <button aria-label="Close enquiry" onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-white/[0.08] transition-colors" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <button aria-label="Close enquiry" onClick={onClose} className="w-11 h-11 rounded-lg flex items-center justify-center hover:bg-white/[0.08] transition-colors" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <X size={13} className="text-white/40" />
           </button>
         </div>
@@ -95,7 +95,7 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
           </div>
 
           <p className="text-xs text-white/60">All fields are required. We will email you about your project.</p>
-          <fieldset disabled={status === "sending" || status === "sent"} className="grid grid-cols-2 gap-3">
+          <fieldset disabled={status === "sending" || status === "sent"} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label htmlFor="pitch-name" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Full Name</label>
               <input
@@ -121,7 +121,7 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2 min-w-0">
               <label htmlFor="pitch-startup" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Startup / Project Name</label>
               <input
                 className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/20 focus:outline-none transition-all"
@@ -133,7 +133,7 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
                 onChange={(e) => setForm({ ...form, startup: e.target.value })}
               />
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2 min-w-0">
               <label htmlFor="pitch-idea" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Describe Your Idea</label>
               <textarea
                 className="w-full rounded-xl px-3 py-2.5 text-sm placeholder-white/20 focus:outline-none transition-all resize-none h-24"
@@ -145,7 +145,7 @@ export default function PitchModal({ onClose, initialIdea = "" }: PitchModalProp
                 onChange={(e) => setForm({ ...form, idea: e.target.value })}
               />
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2 min-w-0">
               <label htmlFor="pitch-stage" className="block text-[10px] uppercase tracking-widest mb-1" style={{ color: "#8ab4ff", fontFamily: "'Space Mono',monospace" }}>Stage</label>
               <div className="relative">
                 <select

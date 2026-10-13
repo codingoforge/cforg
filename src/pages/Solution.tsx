@@ -133,14 +133,10 @@ export default function Solution({ onOpenModal }: SolutionProps) {
         .delay-4 { animation-delay: 0.55s; opacity: 0; }
 
         .dropdown-content {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.4s ease, opacity 0.3s ease;
-          opacity: 0;
+          display: none;
         }
         .dropdown-content.open {
-          max-height: 900px;
-          opacity: 1;
+          display: block;
         }
 
         .cta-fill-btn {
@@ -230,8 +226,8 @@ export default function Solution({ onOpenModal }: SolutionProps) {
               </div>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-medium text-center 
-                bg-gradient-to-r from-white via-blue-100 to-blue-400 
+            <h1 className="text-5xl md:text-7xl font-medium text-center
+                bg-gradient-to-r from-white via-blue-100 to-blue-400
                 bg-clip-text text-transparent leading-[1.1]">
               <span className="block">
                 Find the Right Solution
@@ -267,8 +263,7 @@ export default function Solution({ onOpenModal }: SolutionProps) {
               <div
                 key={title}
                 style={{ cursor: "pointer" }}
-                onMouseEnter={() => setExpanded(title)}
-                onMouseLeave={() => setExpanded(null)}
+
               >
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-1"
@@ -276,8 +271,8 @@ export default function Solution({ onOpenModal }: SolutionProps) {
                     {IconComponent && <IconComponent size={18} className="text-white/50" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-black text-xl text-white">{title}</h3>
+                    <button type="button" className="flex w-full flex-wrap items-center gap-3 text-left min-h-11" aria-expanded={isExpanded} onClick={() => setExpanded(isExpanded ? null : title)}>
+                      <span className="font-black text-xl text-white">{title}</span>
                       {tag && (
                         <span style={{
                           background: "rgba(138,180,255,0.1)",
@@ -292,21 +287,21 @@ export default function Solution({ onOpenModal }: SolutionProps) {
                         }}>{tag}</span>
                       )}
                       <ChevronDown size={16} className={`expand-icon ${isExpanded ? "open" : ""}`} style={{ color: "rgba(255,255,255,0.3)", marginLeft: "auto", flexShrink: 0 }} />
-                    </div>
+                    </button>
                     <div style={{ height: "16px" }} />
                     <p className="text-white/68 text-base leading-relaxed">{desc}</p>
 
                     <div className={`dropdown-content ${isExpanded ? "open" : ""}`}>
                       <div style={{ height: "24px" }} />
 
-                      <div className="flex gap-8">
-                        <div style={{ width: "50%" }}>
+                      <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
+                        <div className="w-full sm:w-1/2 min-w-0">
                           <p className="text-xs font-bold text-[#8ab4ff] mb-3 uppercase tracking-widest" style={{ fontFamily: "'Space Mono', monospace" }}>
                             Why Your Business Needs It
                           </p>
                           <p className="text-white/75 text-base leading-[1.8] text-left">{why}</p>
                         </div>
-                        <div style={{ width: "50%" }}>
+                        <div className="w-full sm:w-1/2 min-w-0">
                           <p className="text-xs font-bold text-[#8ab4ff] mb-3 uppercase tracking-widest" style={{ fontFamily: "'Space Mono', monospace" }}>
                             What It Will Do
                           </p>

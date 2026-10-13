@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
@@ -10,10 +10,25 @@ type NavbarProps = {
 export default function Navbar({ onOpenModal }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const closeOnResize = () => { if (window.innerWidth > 900) setMenuOpen(false); };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); }
+    };
+    window.addEventListener("resize", closeOnResize);
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("resize", closeOnResize);
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -291,8 +306,26 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
         }
 
-        .cf-mobile-menu.open {
-          display: flex;
+        @media (max-width: 900px) {
+          .cf-mobile-menu.open { display: flex; }
+          .cf-nav.top, .cf-nav.scrolled {
+            top: 12px; left: 12px; right: 12px;
+            width: auto; transform: none; border-radius: 24px;
+            border: 1px solid rgba(138,180,255,0.18);
+            backdrop-filter: blur(20px);
+          }
+          .cf-nav-inner { padding: 0 12px; }
+          .cf-logo { gap: 9px; }
+          .cf-logo img { width: 36px; height: 36px; }
+          .cf-logo-text { font-size: 15px; }
+          .cf-hamburger { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+          .cf-mobile-menu {
+            top: 84px; left: 12px; right: 12px; border-radius: 20px;
+            max-height: calc(100dvh - 96px); overflow-y: auto;
+            overscroll-behavior: contain; padding: 12px;
+            border: 1px solid rgba(138,180,255,0.18);
+          }
+          .cf-mobile-actions button { min-height: 44px; }
         }
 
         .cf-mobile-menu a {
@@ -374,7 +407,10 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
           <button
             className={`cf-hamburger ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
+            ref={menuButton}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
             <span />
             <span />
@@ -383,7 +419,7 @@ export default function Navbar({ onOpenModal }: NavbarProps) {
         </div>
       </nav>
 
-      <div className={`cf-mobile-menu ${menuOpen ? "open" : ""}`}>
+      <div id="mobile-navigation" className={`cf-mobile-menu ${menuOpen ? "open" : ""}`}>
         {navLinks.map(({ label, href }) => (
           <a key={label} href={href} onClick={() => setMenuOpen(false)}>
             {label}

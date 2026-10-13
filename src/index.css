@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 100px; }
+body { margin: 0; min-width: 280px; }
+:focus-visible { outline: 2px solid #8ab4ff; outline-offset: 4px; }
+
+@media (max-width: 639px) {
+  /* Keep iOS from zooming into small form controls. */
+  input, textarea, select { font-size: 16px !important; }
+  h1 { font-size: clamp(2.25rem, 8.5vw, 3rem); overflow-wrap: break-word; }
+  #root .cf-footer-inner { padding: 3rem 1.25rem 0; }
+  #root .cf-footer-bottom { padding: 1.5rem 1.25rem; }
+  #root .cf-footer-col button, #root .cf-footer-bottom-links button { min-height: 44px; }
+  #root .cf-footer-col ul { gap: 0; }
+  #root .cf-social-btn { width: 44px; height: 44px; }
+  #root .step-node { gap: 16px; }
+  #root .step-number { width: 48px; height: 48px; font-size: 16px; }
+  #root .step-content { min-width: 0; padding-top: 6px; }
+  #root .step-title { font-size: 23px; }
+  #root .timeline-line { left: 23px; }
+  #root .connector-glow { left: 20px; }
+  #root .step-glow { width: 60px; height: 60px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

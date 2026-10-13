@@ -58,7 +58,7 @@ export default function ProjectAssistant({ onUseBrief }: { onUseBrief: (idea: st
   }
   function updateIdea(value: string) { setIdea(value); setResult(null); setError(""); }
   return (
-    <div className="w-full max-w-2xl text-left">
+    <div className="w-full min-w-0 max-w-2xl text-left break-words">
       <div className="relative bg-[#0b1628] border border-white/10 rounded-2xl p-5 sm:p-8 shadow-2xl">
         <div className="flex items-center gap-3 mb-3">
           <Sparkles size={20} className="text-blue-300 shrink-0" />
@@ -74,17 +74,17 @@ export default function ProjectAssistant({ onUseBrief }: { onUseBrief: (idea: st
               placeholder="For example: We track warehouse stock in spreadsheets and need real-time inventory, alerts and dispatch tracking."
               className="min-w-0 flex-1 bg-transparent outline-none text-white text-sm placeholder:text-slate-500 resize-y leading-relaxed disabled:opacity-70" />
             <button type="submit" disabled={loading} aria-label={loading ? "Creating your brief" : "Generate project brief"}
-              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-200">
+              className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-200">
               {loading ? <LoaderCircle size={20} className="animate-spin" /> : <ArrowUp size={20} />}
             </button>
           </div>
           <div className="flex justify-between gap-3 mt-2 text-xs text-slate-400">
-            <p id="idea-help">Include the problem, users and must-have features.</p><span id="idea-count">{idea.length}/3000</span>
+            <p id="idea-help">Include the problem, users and must-have features.</p><span id="idea-count" className="shrink-0">{idea.length}/3000</span>
           </div>
           <div className="flex flex-wrap gap-2 mt-4">
             {examples.map(example => <button key={example.label} type="button" disabled={loading}
               onClick={() => { updateIdea(example.text); input.current?.focus(); }}
-              className="text-xs px-3 py-2 rounded-full border border-blue-300/20 bg-blue-300/10 text-blue-100 hover:bg-blue-300/20 disabled:opacity-50">Try: {example.label}</button>)}
+              className="min-h-11 text-xs px-3 py-2 rounded-full border border-blue-300/20 bg-blue-300/10 text-blue-100 hover:bg-blue-300/20 disabled:opacity-50">Try: {example.label}</button>)}
           </div>
           <p className="mt-4 text-xs text-slate-400">Your description is sent to Google Gemini to create the brief. Please leave out passwords and confidential customer information.</p>
         </form>
